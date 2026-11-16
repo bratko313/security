@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Sigurnost</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Sigurnost</h1>
+        <p>
+            Demonstracija sigurnosnih ranjivosti
+            web-aplikacija
+        </p>
+    </header>
+
+    <main>
+        <!-- XSS -->
+        <section class="card">
+            <h2>Cross-Site Scripting (XSS)</h2>
+
+            <p>
+                Demonstracija reflektiranog XSS napada.
+                Kada je ranjivost uključena,
+                korisnički unos može se interpretirati
+                kao HTML i JavaScript kod.
+            </p>
+
+            <form action="/xss" method="GET" target="xssResult">
+                <div class="toggle-container">
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="vulnerable"
+                            value="on"
+                            checked
+                        >
+                        Ranjivost uključena
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">
+                        Unesite poruku:
+                    </label>
+
+                    <input
+                        type="text"
+                        id="message"
+                        name="message"
+                        placeholder="Unesite tekst ili HTML..."
+                        required
+                    >
+                </div>
+
+                <button type="submit">
+                    Pošalji poruku
+                </button>
+            </form>
+
+            
+            <div class="result">
+                <h3>Rezultat:</h3>
+
+                <iframe
+                    name="xssResult"
+                    class="xss-frame"
+                    title="Rezultat XSS demonstracije"
+                    sandbox="allow-scripts allow-modals"
+                    srcdoc="<p>Rezultat će se prikazati ovdje.</p>"
+                ></iframe>
+            </div>
+
+        </section>
+
+        
+        <!-- Broken Access Control -->
+        <section class="card">
+            <h2>Broken Access Control</h2>
+
+            <p>
+                Demonstracija neovlaštenog pristupa
+                privatnim zapisima drugih korisnika (IDOR).
+            </p>
+
+            <h3>Prijava korisnika</h3>
+
+            <p>
+                Testni korisnici:<br>
+                ana / ana123<br>
+                marko / marko123
+            </p>
+
+            <div class="result">
+                <strong>Trenutni korisnik:</strong>
+                <span id="currentUser">Nitko</span>
+            </div>
+
+            <form id="loginForm" action="/login" method="POST">
+                <div class="form-group">
+                    <label for="username">
+                        Korisničko ime:
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        Lozinka:
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                    >
+                </div>
+
+                <button type="submit">Prijavi se</button>
+                <button type="button" id="logoutButton">
+                    Odjavi se
+                </button>
+            </form>
+
+            <p id="loginMessage" aria-live="polite"></p>
+
+            <hr>
+
+            <h3>Pristup privatnim zapisima</h3>
+
+            <form id="recordForm" action="/records" method="GET">
+                <div class="toggle-container">
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="vulnerable"
+                            value="on"
+                            checked
+                        >
+                        Ranjivost uključena
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="recordId">
+                        Identifikator zapisa:
+                    </label>
+
+                    <input
+                        type="number"
+                        id="recordId"
+                        name="id"
+                        value="1001"
+                        min="1"
+                        required
+                    >
+                </div>
+
+                <button type="submit">Dohvati zapis</button>
+            </form>
+
+            <div class="result">
+                <h3>Rezultat:</h3>
+                <pre id="recordResult" aria-live="polite">Ovdje će se prikazati rezultat zahtjeva.</pre>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>
+            Napredni razvoj programske potpore za web
+        </p>
+    </footer>
+    <script src="/app.js" defer></script>
+</body>
+</html>
